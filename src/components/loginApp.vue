@@ -6,17 +6,25 @@
                     <v-card-title class="text-center text-h5 font-weight-bold">Login</v-card-title>
                     <v-card-text>
                         <v-form>
-                            <v-text-field label="Email" variant="outlined" prepend-inner-icon="mdi-email"
-                                dense></v-text-field>
+                            <v-text-field label="Email" variant="outlined" prepend-inner-icon="mdi-email" dense
+                                v-model="email"></v-text-field>
 
                             <v-text-field :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                                 :type="show1 ? 'text' : 'password'" label="Senha" prepend-inner-icon="mdi-lock"
-                                variant="outlined" dense counter hint="Mínimo de 8 caracteres"
+                                variant="outlined" dense counter hint="Mínimo de 8 caracteres" v-model="password"
                                 @click:append="show1 = !show1"></v-text-field>
 
-                            <v-btn color="primary" block class="mt-4" @click="login">Entrar</v-btn>
+                            <v-row>
+                                <v-col>
+                                    <v-btn color="primary" block class="mt-4" @click="login">Entrar</v-btn>
+                                </v-col>
+                            </v-row>
+                            <v-card-text>
+                                Ainda não tem cadastro? <strong @click="openModalCadastrar">Clique aqui</strong>
+                            </v-card-text>
                         </v-form>
                     </v-card-text>
+                    <modalCadastroLogin />
                 </v-card>
             </v-col>
         </v-row>
@@ -24,38 +32,31 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useUserStore } from '../store/app';
+import { useAppStore } from '../store/app';
+import modalCadastroLogin from '../components/modals/cadastrarLogin.vue';
 
 export default {
+    components: {
+        modalCadastroLogin
+    },
     name: 'loginApp',
-    setup() {
-        const store = useUserStore(); // Usa a store do Pinia
-
-        const rules = {
-            required: value => !!value || 'Required.',
-            min: v => v.length >= 8 || 'Min 8 characters',
-            emailMatch: () => (`The email and password you entered don't match`),
-        };
-
-        const show1 = ref(false);
-        const email = ref('');
-        const password = ref('');
-
-        const login = () => {
-            // Simulação de login, poderia ser uma requisição HTTP
-            store.cadastrarUsuario("Usuário Teste", email.value, password.value, "Endereço Teste");
-            console.log("Usuário cadastrado:", store.user);
-        };
-
+    data() {
         return {
-            rules,
-            show1,
-            email,
-            password,
-            login
+            store: useAppStore(),  
+            show1: false,
+            email: '',
+            password: ''
         };
+    },
+    methods: {
+        login() {
+            this.store.cadastrarUsuario("Usuário Teste", this.email, this.password, "Endereço Teste");
+            console.log("Usuário cadastrado:", this.store.user);
+        },
+        openModalCadastrar() {
+            this.store.modalCadastro = true;
+            console.log('Clicou no modal de cadastro');
+        }
     }
 };
-
 </script>

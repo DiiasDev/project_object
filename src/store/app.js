@@ -1,12 +1,17 @@
 import { defineStore } from 'pinia';
 
-export const useUserStore = defineStore('userStore', {
+export const useAppStore = defineStore('useAppStore', {
     state: () => ({
-        user: null
+        cadastros: [], 
+        modalCadastro: false
     }),
     actions: {
-        cadastrarUsuario(nome, email, senha, endereco) {
-            this.user = { nome, email, senha, endereco }; // Usa um objeto simples
+        cadastrarUsuario(dados) {
+            this.cadastros.push({ ...dados }); 
+            console.log('Cadastro realizado: ', this.cadastros[0])
+            setTimeout(() => {
+                console.log('Dados armazenados:', this.cadastros);
+            }, 100); 
         }
     }
 });
