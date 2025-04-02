@@ -4,7 +4,7 @@ export const useAppStore = defineStore('useAppStore', {
     state: () => ({
         cadastros: [],
         modalCadastro: false,
-        logado: false  // 🔹 Novo estado para verificar se o usuário está logado
+        logado: false 
     }),
     actions: {
         cadastrarUsuario(dados) {
@@ -15,7 +15,4 @@ export const useAppStore = defineStore('useAppStore', {
             }, 100);
         }
     },
-    setLogado(status) {
-        this.logado = status;  // 🔹 Atualiza o estado do login
-    }
 });
