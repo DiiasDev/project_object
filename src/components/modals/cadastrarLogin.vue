@@ -60,7 +60,7 @@ export default {
     },
     methods: {
         enviarCadastro() {
-            this.store.cadastrarUsuario(this.formData); // Chama a action da store
+            this.store.cadastrarUsuario(this.formData); 
             console.log("Dados cadastrados:", this.store.cadastro);
 
             this.store.modalCadastro = false;
@@ -72,7 +72,8 @@ export default {
                 telefone: '',
                 endereco: ''
             };
-        }
+        },
+        
     }
 };
 </script>

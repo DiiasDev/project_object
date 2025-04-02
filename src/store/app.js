@@ -8,7 +8,7 @@ export const useAppStore = defineStore('useAppStore', {
     actions: {
         cadastrarUsuario(dados) {
             this.cadastros.push({ ...dados }); 
-            console.log('Cadastro realizado: ', this.cadastros[0])
+            console.log('Cadastro realizado!')
             setTimeout(() => {
                 console.log('Dados armazenados:', this.cadastros);
             }, 100); 

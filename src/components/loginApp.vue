@@ -5,13 +5,14 @@
                 <v-card class="elevation-12 pa-6" rounded="lg">
                     <v-card-title class="text-center text-h5 font-weight-bold">Login</v-card-title>
                     <v-card-text>
-                        <v-form>
+                        <v-form ref="form">
                             <v-text-field label="Email" variant="outlined" prepend-inner-icon="mdi-email" dense
-                                v-model="email"></v-text-field>
+                                v-model="email" :rules="[rules.required, rules.email]"></v-text-field>
 
                             <v-text-field :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                                 :type="show1 ? 'text' : 'password'" label="Senha" prepend-inner-icon="mdi-lock"
-                                variant="outlined" dense counter hint="Mínimo de 8 caracteres" v-model="password"
+                                variant="outlined" dense v-model="password"
+                                :rules="[rules.required, rules.minLength]"
                                 @click:append="show1 = !show1"></v-text-field>
 
                             <v-row>
@@ -20,7 +21,7 @@
                                 </v-col>
                             </v-row>
                             <v-card-text>
-                                Ainda não tem cadastro? <strong @click="openModalCadastrar">Clique aqui</strong>
+                                Ainda não tem cadastro? <strong style="cursor: pointer;" @click="openModalCadastrar">Clique aqui</strong>
                             </v-card-text>
                         </v-form>
                     </v-card-text>
@@ -42,20 +43,40 @@ export default {
     name: 'loginApp',
     data() {
         return {
-            store: useAppStore(),  
+            store: useAppStore(),
             show1: false,
             email: '',
-            password: ''
+            password: '',
+            logado: false,
+            rules: {
+                required: v => !!v || 'Campo obrigatório',
+                email: v => /.+@.+\..+/.test(v) || 'E-mail inválido',
+            }
         };
     },
     methods: {
         login() {
-            this.store.cadastrarUsuario("Usuário Teste", this.email, this.password, "Endereço Teste");
-            console.log("Usuário cadastrado:", this.store.user);
+            if (this.email == '') {
+                alert('Preencha os campos')
+                return
+            }
+            // if (this.store.cadastros.length === 0) {
+            //     console.log('Email inválido');
+            //     return; 
+            // }
+            for (let i = 0; i < this.store.cadastros.length; i++) {
+                if (this.email == this.store.cadastros[i].email && this.password == this.store.cadastros[i].senha) {
+                    alert('Logado')
+                    this.logado = true
+                    break
+                } else {
+                    alert('Email ou Senha Inválido!')
+                }
+            }
+
         },
         openModalCadastrar() {
             this.store.modalCadastro = true;
-            console.log('Clicou no modal de cadastro');
         }
     }
 };
